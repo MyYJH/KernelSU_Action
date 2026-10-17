@@ -18,7 +18,7 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 		-b "$KERNEL_SOURCE_BRANCH" "$KERNEL_SOURCE" "$KERNEL_DIR" \
 		|| die "Failed to clone ${KERNEL_SOURCE}"
 
-	rm -rf "$KERNEL_DIR/KernelSU-Next"
+		rm -rf "$KERNEL_DIR/KernelSU-Next"
 	rm -rf "$KERNEL_DIR/drivers/kernelsu"
 	sudo ln -sf "$WORKSPACE/clang/bin/ld.lld" /usr/bin/ld
 	sed -i 's/-Werror//g' "$KERNEL_DIR/Makefile"
@@ -26,16 +26,16 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 	sed -i '/CONFIG_CC_STACKPROTECTOR_STRONG/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	sed -i 's/CONFIG_SHADOW_CALL_STACK=y/CONFIG_SHADOW_CALL_STACK=n/g' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	sed -i '/CONFIG_SHADOW_CALL_STACK/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
-	mv "$WORKSPACE/clang/bin/clang" "$WORKSPACE/clang/bin/clang.real"
-	echo '#!/bin/bash' > "$WORKSPACE/clang/bin/clang"
-	echo 'args=()' >> "$WORKSPACE/clang/bin/clang"
-	echo 'for arg in "$@"; do' >> "$WORKSPACE/clang/bin/clang"
-	echo '  if [[ "$arg" != *"-Werror=unknown-warning-option"* && "$arg" != *"-Werror=implicit-function-declaration"* ]]; then' >> "$WORKSPACE/clang/bin/clang"
-	echo '    args+=("$arg")' >> "$WORKSPACE/clang/bin/clang"
-	echo '  fi' >> "$WORKSPACE/clang/bin/clang"
-	echo 'done' >> "$WORKSPACE/clang/bin/clang"
-	echo 'exec "$WORKSPACE/clang/bin/clang.real" "${args[@]}"' >> "$WORKSPACE/clang/bin/clang"
-	chmod +x "$WORKSPACE/clang/bin/clang"
+	make() {
+		local new_args=()
+		for arg in "$@"; do
+			if [[ "$arg" != *"-Werror=unknown-warning-option"* && "$arg" != *"-Werror=implicit-function-declaration"* ]]; then
+				new_args+=("$arg")
+			fi
+		done
+		command make "${new_args[@]}"
+	}
+	export -f make
 
 export KCFLAGS="-Wno-error"
 export KCPPFLAGS="-Wno-error"
