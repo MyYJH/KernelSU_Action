@@ -26,6 +26,8 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 	sed -i '/CONFIG_CC_STACKPROTECTOR_STRONG/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	sed -i 's/CONFIG_SHADOW_CALL_STACK=y/CONFIG_SHADOW_CALL_STACK=n/g' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	sed -i '/CONFIG_SHADOW_CALL_STACK/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
+	sed -i 's/-implicit-function-declaration//g' "$KERNEL_DIR/Makefile"
+	sed -i 's/-Werror=implicit-function-declaration//g' "$KERNEL_DIR/Makefile"
 
 # KernelSU forks compute their version from the commit count, and several
 # read it straight out of the enclosing git repo. A depth-1 clone reports 1
