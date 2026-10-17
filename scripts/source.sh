@@ -21,6 +21,7 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 	rm -rf "$KERNEL_DIR/KernelSU-Next"
 	rm -rf "$KERNEL_DIR/drivers/kernelsu"
 	sudo ln -sf "$WORKSPACE/clang/bin/ld.lld" /usr/bin/ld
+	sed -i 's/-Werror//g' "$KERNEL_DIR/Makefile"
 
 # KernelSU forks compute their version from the commit count, and several
 # read it straight out of the enclosing git repo. A depth-1 clone reports 1
