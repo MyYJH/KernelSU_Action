@@ -32,6 +32,8 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 	sed -i 's/-Werror=unknown-warning-option//g' "$KERNEL_DIR/scripts/Makefile"
 	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=unknown-warning-option//g' {} +
 	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=implicit-function-declaration//g' {} +
+export KCFLAGS=$(echo "$KCFLAGS" | sed 's/-Werror=unknown-warning-option//g' | sed 's/-Werror=implicit-function-declaration//g')
+export KCPPFLAGS=$(echo "$KCPPFLAGS" | sed 's/-Werror=unknown-warning-option//g' | sed 's/-Werror=implicit-function-declaration//g')
 
 # KernelSU forks compute their version from the commit count, and several
 # read it straight out of the enclosing git repo. A depth-1 clone reports 1
