@@ -26,15 +26,11 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 	sed -i '/CONFIG_CC_STACKPROTECTOR_STRONG/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	sed -i 's/CONFIG_SHADOW_CALL_STACK=y/CONFIG_SHADOW_CALL_STACK=n/g' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	sed -i '/CONFIG_SHADOW_CALL_STACK/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
-	sed -i 's/-implicit-function-declaration//g' "$KERNEL_DIR/Makefile"
-	sed -i 's/-Werror=implicit-function-declaration//g' "$KERNEL_DIR/Makefile"
-	sed -i 's/-Werror=unknown-warning-option//g' "$KERNEL_DIR/Makefile"
-	sed -i 's/-Werror=unknown-warning-option//g' "$KERNEL_DIR/scripts/Makefile"
-	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=unknown-warning-option//g' {} +
-	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=implicit-function-declaration//g' {} +
+	find "$KERNEL_DIR" -type f -exec sed -i 's/unknown-warning-option/no-unknown-warning-option/g' {} +
+	find "$KERNEL_DIR" -type f -exec sed -i 's/implicit-function-declaration/no-implicit-function-declaration/g' {} +
 
-export KCFLAGS="-Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
-export KCPPFLAGS="-Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
+export KCFLAGS="-Wno-error"
+export KCPPFLAGS="-Wno-error"
 
 # KernelSU forks compute their version from the commit count, and several
 # read it straight out of the enclosing git repo. A depth-1 clone reports 1
