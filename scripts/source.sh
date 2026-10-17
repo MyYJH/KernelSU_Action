@@ -28,9 +28,11 @@ ref_exists "$KERNEL_SOURCE" "$KERNEL_SOURCE_BRANCH" \
 	sed -i '/CONFIG_SHADOW_CALL_STACK/d' "$KERNEL_DIR/arch/arm64/configs/b1c1_defconfig"
 	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=unknown-warning-option//g' {} +
 	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=implicit-function-declaration//g' {} +
-	export CFLAGS="$CFLAGS -Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
-	export KCFLAGS="$KCFLAGS -Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
-	export HOSTCFLAGS="$HOSTCFLAGS -Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
+	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=unknown-warning-option//g' {} +
+	find "$KERNEL_DIR" -type f -exec sed -i 's/-Werror=implicit-function-declaration//g' {} +
+	export CFLAGS="-Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
+	export KCFLAGS="-Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
+	export HOSTCFLAGS="-Wno-error=unknown-warning-option -Wno-error=implicit-function-declaration"
 
 export KCFLAGS="-Wno-error"
 export KCPPFLAGS="-Wno-error"
